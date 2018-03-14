@@ -23,16 +23,19 @@ public class SelectDifficultyActivity extends Activity implements View.OnClickLi
     @Override
     public void onClick(View view) {
 
-        Intent intent = new Intent(this, SelectGridActivity.class);
         int level;
         switch (view.getId()) {
             case R.id.Niveau1:
                 level = 1;
+                break;
             case R.id.Niveau2:
                 level = 2;
+                break;
             default:
                 level = 0;
+                break;
         }
+        Intent intent = new Intent(this, SelectGridActivity.class);
         intent.putExtra("Level", level);
         startActivity(intent);
     }
