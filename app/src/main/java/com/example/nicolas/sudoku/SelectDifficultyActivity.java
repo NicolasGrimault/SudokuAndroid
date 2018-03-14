@@ -4,15 +4,14 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
 
-public class MainActivity extends Activity implements View.OnClickListener {
+
+public class SelectDifficultyActivity extends Activity implements View.OnClickListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_select_difficulty);
 
         int[] buttons = {R.id.Niveau1, R.id.Niveau2};
 
@@ -25,6 +24,16 @@ public class MainActivity extends Activity implements View.OnClickListener {
     public void onClick(View view) {
 
         Intent intent = new Intent(this, SelectGridActivity.class);
+        int level;
+        switch (view.getId()) {
+            case R.id.Niveau1:
+                level = 1;
+            case R.id.Niveau2:
+                level = 2;
+            default:
+                level = 0;
+        }
+        intent.putExtra("Level", level);
         startActivity(intent);
     }
 }
