@@ -8,6 +8,8 @@ public class vGrille {
     public int level;
     public int done;
     public int num;
+    public String grille;
+    public String answerGrille;
 
     public vGrille(int level, int done, int num){
         this.level = level;
