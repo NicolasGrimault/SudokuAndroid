@@ -20,21 +20,28 @@ public class Dessin extends View {
     public void onDraw(Canvas canvas) {
         Paint paint = new Paint();
         paint.setColor(Color.BLACK);
+
         int screenWidth = Resources.getSystem().getDisplayMetrics().widthPixels;
         int screenHeight = Resources.getSystem().getDisplayMetrics().heightPixels;
 
         int minSize = screenWidth<screenHeight? screenWidth :screenHeight;
-        int height = minSize/9;
-        int width = minSize/9;
+        int step = minSize/9;
+        paint.setTextSize(step-5);
+        for (int i = 0; i < 9; i++) {
+            canvas.drawLine(0, i * step, minSize, i*step, paint);
+            canvas.drawLine(0, i * step + 1, minSize, i * step + 1, paint);
 
+            canvas.drawLine(i * step, 0, i * step, minSize, paint);
+            canvas.drawLine(i * step + 1, 0, i * step + 1, minSize, paint);
+
+        }
+        canvas.drawLine(0, 9 * step +1 , minSize, 9 * step +1, paint);
 
         for (int i = 0; i < 9; i++) {
-            canvas.drawLine(0, i * height, minSize, i*height, paint);
-            canvas.drawLine(0, i * height + 1, minSize, i * height + 1, paint);
-            canvas.drawLine(i * width, 0, i * width, minSize, paint);
-            canvas.drawLine(i * width + 1, 0, i * width + 1, minSize, paint);
+            canvas.drawLine(i * step + 1, 11 * step +1 , i * step +1, 12 * step +1, paint);
+            canvas.drawText(String.valueOf(i+1), i * step + 35, 12 * step -15, paint);
         }
-        canvas.drawLine(0, 9 * height + 1, minSize, 9 * height + 1, paint);
-
+        canvas.drawLine(0, 11 * step + 1 , minSize, 11 * step + 1, paint);
+        canvas.drawLine(0, 12 * step + 1 , minSize, 12 * step+1, paint);
     }
 }
