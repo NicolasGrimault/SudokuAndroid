@@ -22,20 +22,9 @@ public class Dessin extends View implements View.OnTouchListener {
         this.setOnTouchListener(this);
     }
 
-    public class coord{
-        public int X;
-        public int Y;
-        public int value;
 
-        public coord(int x,int y){
-            this.X=x;
-            this.Y=y;
-        }
-    }
-
-    private List<coord> coords = new ArrayList<coord>();
-    private int coordX = 100;
-    private int coordY = 100;
+    private int coordX;
+    private int coordY;
     private int selectedValue = 0;
 
     private final int screenWidth = Resources.getSystem().getDisplayMetrics().widthPixels;
@@ -43,13 +32,17 @@ public class Dessin extends View implements View.OnTouchListener {
     private int minSize = screenWidth < screenHeight ? screenWidth : screenHeight;
     private int stepSize = minSize / 9;
 
-    private string
+    private String grille = "008203500009670408346050702430010059967005001000496203280034067703500904004107020";
+    private String grilleAnswer = "000000000000000000000000000000000000000000000000000000000000000000000000000000000";
 
     @Override
     public void onDraw(Canvas canvas) {
         Paint paint = new Paint();
         paint.setColor(Color.BLACK);
         paint.setTextSize(stepSize - 5);
+        Paint paint2 = new Paint();
+        paint2.setColor(Color.BLUE);
+        paint2.setTextSize(stepSize - 5);
         for (int i = 0; i < 9; i++) {
             canvas.drawLine(0, i * stepSize, minSize, i * stepSize, paint);
             canvas.drawLine(0, i * stepSize + 1, minSize, i * stepSize + 1, paint);
@@ -70,8 +63,15 @@ public class Dessin extends View implements View.OnTouchListener {
         if (selectedValue != 0)
             canvas.drawText(String.valueOf(selectedValue), coordX, coordY, paint);
 
-        for (coord c:coords) {
-            canvas.drawText(String.valueOf(c.value), (c.X-1) * stepSize + 35, c.Y * stepSize - 15, paint);
+        for (int i = 0; i < 81; i++) {
+            int x = i / 9;
+            int y = i % 9;
+            if (grille.charAt(i) != '0')
+                canvas.drawText(String.valueOf(grille.charAt(i)), x * stepSize + 35, (y + 1) * stepSize - 15, paint);
+            else
+                if (grilleAnswer.charAt(i) != '0')
+                    canvas.drawText(String.valueOf(grilleAnswer.charAt(i)), x * stepSize + 35, (y + 1) * stepSize - 15, paint2);
+
         }
     }
 
@@ -82,16 +82,15 @@ public class Dessin extends View implements View.OnTouchListener {
         Log.d("TAG", "coord: " + coordX + " " + coordY);
         switch (motionEvent.getAction()) {
             case MotionEvent.ACTION_DOWN:
-               selectedValue= getSelectedNumber(coordX,coordY);
+                selectedValue = getSelectedNumber(coordX, coordY);
                 break;
             case MotionEvent.ACTION_MOVE:
                 break;
             case MotionEvent.ACTION_UP:
-                if (selectedValue != 0){
-                    coord c = getCoord(coordX,coordY);
-                    if (c != null) {
-                        c.value = selectedValue;
-                        coords.add(c);
+                if (selectedValue != 0) {
+                    int c = getCoord(coordX, coordY);
+                    if (c != -1) {
+                        grilleAnswer = grilleAnswer.substring(0, c) + selectedValue + grilleAnswer.substring(c+1);
                     }
                 }
                 selectedValue = 0;
@@ -101,16 +100,18 @@ public class Dessin extends View implements View.OnTouchListener {
         return true;
     }
 
-    private coord getCoord(int x , int y){
-        if ( y > minSize)
-            return null;
+    private int getCoord(int x, int y) {
+        if (y > minSize)
+            return -1;
         else
-            return new coord((x / stepSize) +1,(y / stepSize) +1);
+            return ((x / stepSize) ) * 9 + (y / stepSize) ;
+
     }
-    private int getSelectedNumber( int x, int y){
-        if (y < 11 * stepSize + 1 || y > 12 * stepSize + 1 )
+
+    private int getSelectedNumber(int x, int y) {
+        if (y < 11 * stepSize + 1 || y > 12 * stepSize + 1)
             return 0;
         else
-            return  (x / stepSize) +1;
+            return (x / stepSize) + 1;
     }
 }
