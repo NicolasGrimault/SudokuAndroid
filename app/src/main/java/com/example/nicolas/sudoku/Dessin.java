@@ -68,13 +68,19 @@ public class Dessin extends View implements View.OnTouchListener {
         if (selectedValue != 0)
             canvas.drawText(String.valueOf(selectedValue), coordX, coordY, defaultPaint);
 
+        boolean isAllcorrect = true;
         for (int i = 0; i < 81; i++) {
             int x = i / 9;
             int y = i % 9;
             if (grille.charAt(i) != '0')
                 canvas.drawText(String.valueOf(grille.charAt(i)), x * stepSize + correctionTextX, y * stepSize + correctionTextY, defaultPaint);
-            else if (grilleAnswer.charAt(i) != '0')
+            else if (grilleAnswer.charAt(i) != '0') {
                 canvas.drawText(String.valueOf(grilleAnswer.charAt(i)), x * stepSize + correctionTextX, y * stepSize + correctionTextY, isUnique(i) ? bluePaint : redPaint);
+                isAllcorrect = false;
+            }
+        }
+        if (isAllcorrect && IsFinished() ){
+            //Win
         }
     }
 
@@ -92,16 +98,24 @@ public class Dessin extends View implements View.OnTouchListener {
             if (indY != index && !AreCompatible(index, indY))
                 return false;
         }
-        for (int i = 0; i < 3; i++){
-            for (int j = 0; j < 3; j++)
-            {
-            int ind =(cellX*3 + i) * 9 + (cellY*3 +j);
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                int ind = (cellX * 3 + i) * 9 + (cellY * 3 + j);
                 if (ind != index && !AreCompatible(index, ind))
                     return false;
             }
         }
 
         return true;
+    }
+
+    public boolean IsFinished() {
+        int answer = 0;
+        for (int i = 0; i < grille.length(); i++) {
+            if (grille.charAt(i) != '0' || grilleAnswer.charAt(i) != '0')
+                answer++;
+        }
+        return answer == grille.length();
     }
 
     public boolean AreCompatible(int indexA, int indexB) {
