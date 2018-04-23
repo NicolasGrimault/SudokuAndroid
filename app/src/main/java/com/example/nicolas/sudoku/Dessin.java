@@ -81,7 +81,8 @@ public class Dessin extends View implements View.OnTouchListener {
     public boolean isUnique(int index) {
         int x = index / 9;
         int y = index % 9;
-
+        int cellX = Math.round(x / 3);
+        int cellY = Math.round(y / 3);
 
         for (int i = 0; i < 9; i++) {
             int indX = x * 9 + i;
@@ -91,6 +92,15 @@ public class Dessin extends View implements View.OnTouchListener {
             if (indY != index && !AreCompatible(index, indY))
                 return false;
         }
+        for (int i = 0; i < 3; i++){
+            for (int j = 0; j < 3; j++)
+            {
+            int ind =(cellX*3 + i) * 9 + (cellY*3 +j);
+                if (ind != index && !AreCompatible(index, ind))
+                    return false;
+            }
+        }
+
         return true;
     }
 
