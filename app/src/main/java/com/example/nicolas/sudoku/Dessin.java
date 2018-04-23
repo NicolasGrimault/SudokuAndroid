@@ -75,11 +75,14 @@ public class Dessin extends View implements View.OnTouchListener {
             if (grille.charAt(i) != '0')
                 canvas.drawText(String.valueOf(grille.charAt(i)), x * stepSize + correctionTextX, y * stepSize + correctionTextY, defaultPaint);
             else if (grilleAnswer.charAt(i) != '0') {
-                canvas.drawText(String.valueOf(grilleAnswer.charAt(i)), x * stepSize + correctionTextX, y * stepSize + correctionTextY, isUnique(i) ? bluePaint : redPaint);
-                isAllcorrect = false;
+                boolean isUnique = isUnique(i);
+                canvas.drawText(String.valueOf(grilleAnswer.charAt(i)), x * stepSize + correctionTextX, y * stepSize + correctionTextY, isUnique ? bluePaint : redPaint);
+
+                if (!isUnique)
+                    isAllcorrect = false;
             }
         }
-        if (isAllcorrect && IsFinished() ){
+        if (isAllcorrect && IsFinished()) {
             //Win
         }
     }
